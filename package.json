@@ -16,5 +16,8 @@
     "express": "^4.19.2",
     "nodemon": "^3.1.4",
     "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "mysql2": "^3.10.3"
   }
 }
