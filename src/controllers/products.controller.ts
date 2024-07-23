@@ -9,6 +9,7 @@ const getProduct = (req: Request, res: Response) => {
 }
 
 const createProduct = (req: Request, res: Response) => {
+    const product = req.body;
 
 }
 
