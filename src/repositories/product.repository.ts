@@ -1,23 +1,43 @@
-import Product from "../models/product.model";
-import { IBaseRepository } from "../types/repository.type";
+import { Op } from "sequelize";
+import { Product, ProductInput, ProductOuput } from "../models";
 
-class ProductRepository implements IBaseRepository<Product> {
+const create = async (payload: ProductInput): Promise<ProductOuput> => {
+  return await Product.create(payload);
+};
 
-    async save(tutorial: Product): Promise<Product> {
-        try {
-            return await Product.create({});
-        } catch (err) {
-            throw new Error("Failed to create product!");
-        }
-    }
+const update = async (
+  id: number,
+  payload: Partial<ProductInput>
+): Promise<ProductOuput> => {
+  const product = await Product.findByPk(id);
 
-    async retrieveAll(): Promise<Product<Product>> { }
+  if (!product) {
+    throw new Error("Product not found");
+  }
 
-    async retrieveById(ProductId: number): Promise<Product | null> { }
+  return await (product as Product).update(payload);
+};
 
-    async update(Product: Product): Promise<number> { }
+const getById = async (id: number): Promise<ProductOuput> => {
+  const product = await Product.findByPk(id);
 
-    async delete(ProductId: number): Promise<number> { }
-}
+  if (!product) {
+    throw new Error("Product not found");
+  }
 
-export default new ProductRepository();
+  return product;
+};
+
+const deleteById = async (id: number): Promise<boolean> => {
+  const deletedProductCount = await Product.destroy({
+    where: { id },
+  });
+  
+  return !!deletedProductCount;
+};
+
+const getAll = async (): Promise<ProductOuput[]> => {
+  return Product.findAll();
+};
+
+export { create, update, getById, getAll, deleteById };

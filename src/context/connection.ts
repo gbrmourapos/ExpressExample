@@ -1,39 +1,15 @@
-import { Sequelize } from "sequelize-typescript";
-import Product from "../models/product.model";
-import { config, dialect } from "../env.dev";
+import { Dialect, Sequelize } from 'sequelize'
+import 'dotenv/config';
 
-class Database {
-  public sequelize: Sequelize | undefined;
+const dbName = process.env.DB_NAME as string
+const dbUser = process.env.DB_USER as string
+const dbHost = process.env.DB_HOST
+const dbDriver = process.env.DB_DRIVER as Dialect
+const dbPassword = process.env.DB_PASSWORD
 
-  constructor() {
-    this.connectToDatabase();
-  }
+const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
+  host: dbHost,
+  dialect: dbDriver
+})
 
-  private async connectToDatabase() {
-    this.sequelize = new Sequelize({
-      database: config.DB,
-      username: config.USER,
-      password: config.PASSWORD,
-      host: config.HOST,
-      dialect: dialect,
-      pool: {
-        max: config.pool.max,
-        min: config.pool.min,
-        acquire: config.pool.acquire,
-        idle: config.pool.idle
-      },
-      models: [Product]
-    });
-
-    await this.sequelize
-      .authenticate()
-      .then(() => {
-        console.log("Connection has been established successfully.");
-      })
-      .catch((err) => {
-        console.error("Unable to connect to the Database:", err);
-      });
-  }
-}
-
-export default Database;
+export default sequelizeConnection

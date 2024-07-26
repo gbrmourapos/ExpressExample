@@ -1,11 +1,16 @@
 import express, { Request, Response, NextFunction } from "express";
-import { productsRoute } from "./routes";
+import { devicesRoute, productsRoute, usersRoute } from "./routes";
+import dbInit from "./context/dbinit";
 
 const app = express();
 const port = 5000;
 
+dbInit();
+
 app.use(express.json());
-app.use('/products', productsRoute)
+app.use('/product', productsRoute)
+app.use('/user', usersRoute)
+app.use('/device', devicesRoute)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);

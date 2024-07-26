@@ -1,29 +1,29 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelizeConnection from "../context/connection";
 
-interface ProductAttributes {
+interface UserAttributes {
   id: number;
   name: string;
-  description: string;
-  size: number;
-  type: string;
+  lastname: string;
+  age: number;
+  address: string;
 }
 
-interface ProductInput extends Optional<ProductAttributes, "id"> {}
-interface ProductOuput extends Required<ProductAttributes> {}
+interface UserInput extends Optional<UserAttributes, "id"> {}
+interface UserOuput extends Required<UserAttributes> {}
 
-class Product
-  extends Model<ProductAttributes, ProductInput>
-  implements ProductAttributes
+class User
+  extends Model<UserAttributes, UserInput>
+  implements UserAttributes
 {
   public id!: number;
   public name!: string;
-  public description!: string;
-  public size!: number;
-  public type!: string;
+  public lastname!: string;
+  public age!: number;
+  public address!: string;
 }
 
-Product.init(
+User.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -34,15 +34,15 @@ Product.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: {
+    lastname: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
-    size: {
+    age: {
       type: DataTypes.INTEGER,
     },
-    type: {
+    address: {
       type: DataTypes.STRING,
     },
   },
@@ -53,4 +53,4 @@ Product.init(
   }
 );
 
-export { Product, ProductInput, ProductOuput };
+export { User, UserInput, UserOuput };
