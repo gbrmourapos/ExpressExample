@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { TodoRequestDTO, TodoResponseDTO } from "../types/todo.type";
 import { ITodo } from "../models/todo.model";
-import { create, deleteById, getAll, getById } from "../repositories/todo.repository";
+import { create, deleteById, getAll, getById, update } from "../repositories/todo.repository";
 
 const createTodo = async (req: Request, res: Response) => {
   try {
@@ -84,4 +84,37 @@ const deleteTodo = async (req: Request, res: Response) => {
   }
 };
 
-export { createTodo, listTodo, getTodo, deleteTodo };
+const updateTodo = async (req: Request, res: Response) => {
+  try {
+    const id: string = String(req.params.id); 
+    const todoRequest: TodoRequestDTO = req.body;
+    const iTodo: ITodo = {
+      title: todoRequest.title,
+      group: todoRequest.group,
+      description: todoRequest.description,
+      createdAt: new Date(),
+    };
+
+    const updateResponse = await update(id, iTodo);
+    
+    if (updateResponse.modifiedCount > 0) {
+      const todo = await getById(id);
+      const todoResponse: TodoResponseDTO = {
+        id: todo._id,
+        title: todo.title,
+        description: todo.description,
+        group: todo.group,
+        createdAt: todo.createdAt,
+        updatedAt: todo.updatedAt,
+      };
+
+      return res.status(200).send(todoResponse);
+    }
+
+    return res.status(404).send();
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+};
+
+export { createTodo, listTodo, getTodo, deleteTodo, updateTodo };

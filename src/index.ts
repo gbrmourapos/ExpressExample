@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { devicesRoute, productsRoute, todosRoute, usersRoute } from "./routes";
+import { devicesRoute, musicRoute, productsRoute, restaurantRoute, todosRoute, usersRoute } from "./routes";
 import dbInit from "./context/dbinit";
 import { mongoDbInit } from "./context/mongodb-connection";
 
@@ -10,10 +10,15 @@ dbInit();
 mongoDbInit();
 
 app.use(express.json());
+
 app.use('/product', productsRoute)
 app.use('/user', usersRoute)
 app.use('/device', devicesRoute)
+
 app.use('/todo', todosRoute)
+app.use('/restaurant', restaurantRoute)
+app.use('/music', musicRoute)
+
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);

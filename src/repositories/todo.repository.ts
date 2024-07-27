@@ -6,13 +6,29 @@ const create = async (payload: ITodo): Promise<ITodoDoc> => {
   return todo;
 };
 
+const update = async (id: string, payload: ITodo): Promise<any> => {
+  const todo = await Todo.updateOne(
+    { _id: id },
+    {
+      $set: {
+        title: payload.title,
+        description: payload.description,
+        group: payload.group,
+        updatedAt: new Date(),
+      },
+    }
+  );
+
+  return todo;
+};
+
 const getAll = async (): Promise<any> => {
   const todo = await Todo.find();
   return todo;
 };
 
 const getById = async (id: string): Promise<any> => {
-  const todo = await Todo.find({_id: id});
+  const todo = await Todo.find({ _id: id });
 
   if (!todo || todo.length <= 0) {
     throw new Error("Todo not found");
@@ -22,9 +38,9 @@ const getById = async (id: string): Promise<any> => {
 };
 
 const deleteById = async (id: string): Promise<any> => {
-  const todo = await Todo.deleteOne({_id: id});
+  const todo = await Todo.deleteOne({ _id: id });
   console.log(todo);
   return todo;
-}
+};
 
-export { create, getAll, getById, deleteById };
+export { create, getAll, getById, deleteById, update };
